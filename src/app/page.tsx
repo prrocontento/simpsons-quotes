@@ -7,7 +7,9 @@ import { getQuotesService } from "../services/getQuotesService";
 import styles from "./page.module.css";
 
 export default function Home() {
-  const [setQuotes, setSetQuotes] = useState();
+  const [setQuotes, setSetQuotes] = useState([]);
+  const [text, setText] = useState();
+
   useEffect(() => {
     const getData = async () => {
       try {
@@ -19,12 +21,19 @@ export default function Home() {
     };
     getData();
   }, []);
-  console.log("setQuotes", setQuotes);
+
+  useEffect(() => {
+    if (setQuotes.length > 0) {
+      const RANDOM_NUMBER = Math.floor(Math.random() * setQuotes.length);
+      const getRandomQuote = (setQuotes: any) => setQuotes[RANDOM_NUMBER].quote;
+      const quote = getRandomQuote(setQuotes);
+      setText(quote);
+    }
+  }, [setQuotes]);
 
   return (
     <main className={styles.main}>
-      Welcome to The Simpsons Quotes Trivia
-      <Quote />
+      {text && <Quote text={text} />}
       <AvatarList />
     </main>
   );
